@@ -12,6 +12,7 @@ import java.util.List;
 
 import static com.example.netty.c1.ByteBufferUtil.debugRead;
 
+// 非阻塞模式
 @Slf4j
 public class Server2 {
     public static void main(String[] args) {
@@ -27,20 +28,25 @@ public class Server2 {
             List<SocketChannel> channels = new ArrayList<>();
             while (true) {
                 // 设置成非阻塞模式没有连接时返回 null，不会阻塞线程
+                ssc.configureBlocking(false);
 
-                // 4. accept 建立与客户端连接， SocketChannel 用来与客户端之间通信
-                log.debug("connecting...");
-                SocketChannel sc = ssc.accept(); // 阻塞方法，线程停止运行
-                log.debug("connected...");
-                channels.add(sc);
+                SocketChannel sc = ssc.accept();
+                // 通道不为空时才将连接放入到集合中
+                if (sc != null) {
+                    System.out.println("after connecting...");
+                    channels.add(sc);
+                }
                 for (SocketChannel channel : channels) {
-                    // 5. 接收客户端发送的数据
-                    log.debug("before read... {}", channel);
-                    channel.read(buffer); // 阻塞方法，线程停止运行
-                    buffer.flip();
-                    debugRead(buffer);
-                    buffer.clear();
-                    log.debug("after read ... {}", channel);
+                    channel.configureBlocking(false);
+
+                    int read = channel.read(buffer); // 阻塞方法，线程停止运行
+                    if (read > 0) {
+                        buffer.flip();
+                        debugRead(buffer);
+                        buffer.clear();
+                        System.out.println("after reading");
+                    }
+
                 }
             }
         }catch (IOException e) {
