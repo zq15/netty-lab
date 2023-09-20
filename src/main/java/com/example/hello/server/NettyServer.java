@@ -2,6 +2,8 @@ package com.example.hello.server;
 
 import com.example.hello.codec.PacketDecoder;
 import com.example.hello.codec.PacketEncoder;
+import com.example.hello.codec.Spliter;
+import com.example.hello.server.handler.FirstServerHandler;
 import com.example.hello.server.handler.LoginRequestHandler;
 import com.example.hello.server.handler.MessageRequestHandler;
 import io.netty.bootstrap.ServerBootstrap;
@@ -10,6 +12,7 @@ import io.netty.channel.ChannelOption;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
 
@@ -34,6 +37,8 @@ public class NettyServer {
                     protected void initChannel(NioSocketChannel nioSocketChannel) throws Exception {
                         // 指定连接数据读写的逻辑
                         System.out.println("服务启动中");
+//                        nioSocketChannel.pipeline().addLast(new LengthFieldBasedFrameDecoder(Integer.MAX_VALUE, 7, 4));
+                        nioSocketChannel.pipeline().addLast(new Spliter());
                         nioSocketChannel.pipeline().addLast(new PacketDecoder());
                         nioSocketChannel.pipeline().addLast(new LoginRequestHandler());
                         nioSocketChannel.pipeline().addLast(new MessageRequestHandler());

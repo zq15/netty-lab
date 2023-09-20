@@ -16,7 +16,7 @@ import static com.example.hello.protocol.command.Command.*;
 
 public class PacketCodeC {
 
-    private static final int MAGIC_NUMBER = 0x12345678;
+    public static final int MAGIC_NUMBER = 0x12345678;
     // 修改为单例模式调用
     public static final PacketCodeC INSTANCE = new PacketCodeC();
 
