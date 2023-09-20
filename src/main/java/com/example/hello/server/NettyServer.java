@@ -4,6 +4,7 @@ import com.example.hello.codec.PacketDecoder;
 import com.example.hello.codec.PacketEncoder;
 import com.example.hello.codec.Spliter;
 import com.example.hello.server.handler.FirstServerHandler;
+import com.example.hello.server.handler.LifeCyCleTestHandler;
 import com.example.hello.server.handler.LoginRequestHandler;
 import com.example.hello.server.handler.MessageRequestHandler;
 import io.netty.bootstrap.ServerBootstrap;
@@ -39,6 +40,7 @@ public class NettyServer {
                         System.out.println("服务启动中");
 //                        nioSocketChannel.pipeline().addLast(new LengthFieldBasedFrameDecoder(Integer.MAX_VALUE, 7, 4));
                         nioSocketChannel.pipeline().addLast(new Spliter());
+                        nioSocketChannel.pipeline().addLast(new LifeCyCleTestHandler());
                         nioSocketChannel.pipeline().addLast(new PacketDecoder());
                         nioSocketChannel.pipeline().addLast(new LoginRequestHandler());
                         nioSocketChannel.pipeline().addLast(new MessageRequestHandler());
