@@ -35,7 +35,7 @@ public class PacketCodeC {
         serializerMap.put(serializer.getSerializerAlgorithm(), serializer);
     }
 
-    public ByteBuf encode(ByteBuf byteBuf, Packet packet) {
+    public void encode(ByteBuf byteBuf, Packet packet) {
         // 1. 序列化 java 对象
         byte[] bytes = Serializer.DEFAULT.serialize(packet);
 
@@ -46,8 +46,6 @@ public class PacketCodeC {
         byteBuf.writeByte(packet.getCommand());
         byteBuf.writeInt(bytes.length);
         byteBuf.writeBytes(bytes);
-
-        return byteBuf;
     }
 
     public Packet decode(ByteBuf byteBuf) {
