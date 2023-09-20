@@ -1,19 +1,15 @@
 package com.example.hello.protocol.response;
 
-
 import com.example.hello.protocol.Packet;
 import com.example.hello.protocol.command.Command;
 import lombok.Data;
 
 @Data
-public class LoginResponsePacket extends Packet {
-
-    private boolean success;
-
-    private String reason;
-
+public class MessageResponsePacket extends Packet {
+    private String message;
+    
     @Override
     public Byte getCommand() {
-        return Command.LOGIN_RESPONSE;
+        return Command.MESSAGE_RESPONSE;
     }
 }

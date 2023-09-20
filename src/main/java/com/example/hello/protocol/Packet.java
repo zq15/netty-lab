@@ -13,7 +13,7 @@ public abstract class Packet {
     private Byte version = 1;
 
     /**
-     * 指令
+     * 指令 在  PacketCodeC 中根据 command 的不同，把 packet 解析成不同的 具体类型的 packet
      * @return
      */
     @JSONField(serialize = false)
