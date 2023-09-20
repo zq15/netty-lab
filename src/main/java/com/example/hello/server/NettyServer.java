@@ -1,5 +1,11 @@
 package com.example.hello.server;
 
+import com.example.hello.server.handler.inbound.InBoundHandlerA;
+import com.example.hello.server.handler.inbound.InBoundHandlerB;
+import com.example.hello.server.handler.inbound.InBoundHandlerC;
+import com.example.hello.server.handler.outbound.OutBoundHandlerA;
+import com.example.hello.server.handler.outbound.OutBoundHandlerB;
+import com.example.hello.server.handler.outbound.OutBoundHandlerC;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
@@ -30,7 +36,21 @@ public class NettyServer {
                     protected void initChannel(NioSocketChannel nioSocketChannel) throws Exception {
                         // 指定连接数据读写的逻辑
                         System.out.println("服务启动中");
-                        nioSocketChannel.pipeline().addLast(new ServerHandler());
+//                        nioSocketChannel.pipeline()
+//                                .addLast(new ServerHandler());
+                        nioSocketChannel.pipeline()
+                                .addLast(new InBoundHandlerA());
+                        nioSocketChannel.pipeline()
+                                .addLast(new InBoundHandlerB());
+                        nioSocketChannel.pipeline()
+                                .addLast(new InBoundHandlerC());
+
+                        nioSocketChannel.pipeline()
+                                .addLast(new OutBoundHandlerA());
+                        nioSocketChannel.pipeline()
+                                .addLast(new OutBoundHandlerB());
+                        nioSocketChannel.pipeline()
+                                .addLast(new OutBoundHandlerC());
                     }
                 });
         bind(serverBootstrap, PORT);
