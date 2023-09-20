@@ -1,10 +1,12 @@
 package com.example.hello.client;
 
-import com.example.hello.protocol.PacketCodeC;
+import com.example.hello.client.handler.LoginResponseHandler;
+import com.example.hello.client.handler.MessageResponseHandler;
+import com.example.hello.codec.PacketDecoder;
+import com.example.hello.codec.PacketEncoder;
 import com.example.hello.protocol.request.MessageRequestPacket;
 import com.example.hello.util.LoginUtil;
 import io.netty.bootstrap.Bootstrap;
-import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
@@ -38,8 +40,10 @@ public class NettyClient {
                 .handler(new ChannelInitializer<SocketChannel>() {
                     @Override
                     protected void initChannel(SocketChannel socketChannel) throws Exception {
-                        socketChannel.pipeline()
-                                .addLast(new ClientHandler());
+                        socketChannel.pipeline().addLast(new PacketDecoder());
+                        socketChannel.pipeline().addLast(new LoginResponseHandler());
+                        socketChannel.pipeline().addLast(new MessageResponseHandler());
+                        socketChannel.pipeline().addLast(new PacketEncoder());
                     }
                 });
         connect(bootstrap, HOST, PORT, MAX_RETRY);
@@ -76,10 +80,7 @@ public class NettyClient {
                     Scanner sc = new Scanner(System.in);
                     String line = sc.nextLine();
 
-                    MessageRequestPacket packet = new MessageRequestPacket();
-                    packet.setMessage(line);
-                    ByteBuf byteBuf = PacketCodeC.INSTANCE.encode(channel.alloc(), packet);
-                    channel.writeAndFlush(byteBuf);
+                    channel.writeAndFlush(new MessageRequestPacket(line));
                 }
             }
         }).start();
