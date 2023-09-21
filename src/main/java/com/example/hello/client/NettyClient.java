@@ -6,6 +6,7 @@ import com.example.hello.client.handler.*;
 import com.example.hello.codec.PacketDecoder;
 import com.example.hello.codec.PacketEncoder;
 import com.example.hello.codec.Spliter;
+import com.example.hello.handler.IMIdleStateHandler;
 import com.example.hello.protocol.request.LoginRequestPacket;
 import com.example.hello.protocol.request.MessageRequestPacket;
 import com.example.hello.util.SessionUtil;
@@ -43,6 +44,9 @@ public class NettyClient {
                 .handler(new ChannelInitializer<SocketChannel>() {
                     @Override
                     protected void initChannel(SocketChannel ch) throws Exception {
+                        // 空闲检测
+                        ch.pipeline().addLast(new IMIdleStateHandler());
+
                         ch.pipeline().addLast(new Spliter());
                         ch.pipeline().addLast(new PacketDecoder());
                         // 登录响应处理器
@@ -62,6 +66,9 @@ public class NettyClient {
                         // 登出响应处理器
                         ch.pipeline().addLast(new LogoutResponseHandler());
                         ch.pipeline().addLast(new PacketEncoder());
+
+                        // 心跳定时器
+                        ch.pipeline().addLast(new HeartBeatTimerHandler());
                     }
                 });
         connect(bootstrap, HOST, PORT, MAX_RETRY);

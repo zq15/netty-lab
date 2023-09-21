@@ -4,6 +4,7 @@ import com.example.hello.codec.PacketCodecHandler;
 import com.example.hello.codec.PacketDecoder;
 import com.example.hello.codec.PacketEncoder;
 import com.example.hello.codec.Spliter;
+import com.example.hello.handler.IMIdleStateHandler;
 import com.example.hello.server.handler.*;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelInitializer;
@@ -33,9 +34,12 @@ public class NettyServer {
 
                     @Override
                     protected void initChannel(NioSocketChannel ch) throws Exception {
+                        // 空闲检测
+                        ch.pipeline().addLast(new IMIdleStateHandler());
                         ch.pipeline().addLast(new Spliter());
                         ch.pipeline().addLast(PacketCodecHandler.INSTANCE);
                         ch.pipeline().addLast(LoginRequestHandler.INSTANCE);
+                        ch.pipeline().addLast(HeartBeatRequestHandler.INSTANCE);
                         ch.pipeline().addLast(AuthHandler.INSTANCE);
                         ch.pipeline().addLast(IMHandler.INSTANCE);
                     }
