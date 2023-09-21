@@ -1,8 +1,12 @@
 package com.example.hello.protocol;
 
+import com.example.hello.protocol.request.CreateGroupRequestPacket;
 import com.example.hello.protocol.request.LoginRequestPacket;
+import com.example.hello.protocol.request.LogoutRequestPacket;
 import com.example.hello.protocol.request.MessageRequestPacket;
+import com.example.hello.protocol.response.CreateGroupResponsePacket;
 import com.example.hello.protocol.response.LoginResponsePacket;
+import com.example.hello.protocol.response.LogoutResponsePacket;
 import com.example.hello.protocol.response.MessageResponsePacket;
 import com.example.hello.serialize.Serializer;
 import com.example.hello.serialize.impl.JSONSerializer;
@@ -29,6 +33,10 @@ public class PacketCodeC {
         packetTypeMap.put(LOGIN_RESPONSE, LoginResponsePacket.class);
         packetTypeMap.put(MESSAGE_REQUEST, MessageRequestPacket.class);
         packetTypeMap.put(MESSAGE_RESPONSE, MessageResponsePacket.class);
+        packetTypeMap.put(LOGOUT_REQUEST, LogoutRequestPacket.class);
+        packetTypeMap.put(LOGOUT_RESPONSE, LogoutResponsePacket.class);
+        packetTypeMap.put(CREATE_GROUP_REQUEST, CreateGroupRequestPacket.class);
+        packetTypeMap.put(CREATE_GROUP_RESPONSE, CreateGroupResponsePacket.class);
 
         serializerMap = new HashMap<>();
         Serializer serializer = new JSONSerializer();
