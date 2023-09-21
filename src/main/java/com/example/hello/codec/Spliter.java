@@ -1,6 +1,6 @@
 package com.example.hello.codec;
 
-import com.example.hello.protocol.PacketCodeC;
+import com.example.hello.protocol.PacketCodec;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
@@ -17,7 +17,7 @@ public class Spliter extends LengthFieldBasedFrameDecoder {
 
     @Override
     protected Object decode(ChannelHandlerContext ctx, ByteBuf in) throws Exception {
-        if (in.getInt(in.readerIndex()) != PacketCodeC.MAGIC_NUMBER) {
+        if (in.getInt(in.readerIndex()) != PacketCodec.MAGIC_NUMBER) {
             ctx.channel().close();
             return null;
         }
