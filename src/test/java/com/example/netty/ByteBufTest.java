@@ -1,4 +1,4 @@
-package com.example.hello.bytebuf;
+package com.example.netty;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;

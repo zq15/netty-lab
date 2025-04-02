@@ -20,7 +20,7 @@ public class Server3 {
     public static void main(String[] args) {
         // 1.创建了服务器
         try (ServerSocketChannel channel = ServerSocketChannel.open();) {
-            channel.bind(new InetSocketAddress(8080));
+            channel.bind(new InetSocketAddress(8089));
             System.out.println(channel);
             Selector selector = Selector.open();
             channel.configureBlocking(false);
